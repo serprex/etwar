@@ -1,0 +1,10 @@
+node_modules/*
+favicon.png
+.ninja_log
+.ninja_deps
+pixi.*
+*.csv
+*.exe
+*.gz
+*.rdb
+*.sh

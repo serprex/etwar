@@ -1,0 +1,19 @@
+{
+  "name": "EtWar",
+  "description": "Elements the War",
+  "readme": "readme.txt",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/serprex/etwar.git"
+  },
+  "dependencies": {
+    "compression": "^1.4.4",
+    "connect": "^3.3.5",
+    "redis": "^0.12.1",
+    "serve-static": "^1.9.3"
+  },
+  "optionalDependencies": {
+    "hiredis": "^0.3.0"
+  },
+  "license": "MIT"
+}
