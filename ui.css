@@ -1,0 +1,27 @@
+*{box-sizing:border-box}
+body{
+	background-color:black;
+	background-image:url(assets/bg_default.png);
+	background-repeat:no-repeat;
+	color:white;
+	margin:0;
+	font:16px Dosis;
+}
+a{
+	color:#6699FF;
+	text-decoration:none;
+}
+tr,td{padding:0}
+input[type="text"],input[type="password"],input:not([type]){width:150px}
+.bgbox{
+	background-color:#0d2e4a;
+	border-style:solid;
+	border-width:2px;
+	border-left-color:#121212;
+	border-bottom-color:#121212;
+	border-top-color:#969696;
+	border-right-color:#969696;
+	padding:4px;
+	overflow:hidden;
+}
+.numput{width:32px!important}

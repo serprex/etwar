@@ -1,5 +1,46 @@
 <title>WM panel</title>
+<link rel="stylesheet" href="ui.css">
 <!-- Have some auth that we send to server to verify in some gitignore dot file. Then expose creating a team, setting members of team, generating matches, inputting results, penalties -->
 <div id="maindiv"></div>
 <script>
+function requestAuth(pass){
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("error", createLoginForm);
+	xhr.addEventListener("load", createPanel);
+	xhr.open("GET", "wmlogin?auth="+encodeURIComponent(pass), true);
+	xhr.send();
+}
+function clearMain(){
+	while (maindiv.firstChild) maindiv.firstChild.remove();
+}
+function createLoginForm(){
+	clearMain();
+	document.createElement("input");
+	input.placeholder="auth";
+	input.addEventListener("keydown", function(e){
+		if (e.keyCode == 13){
+			requestAuth(input.value);
+		}
+	});
+	maindiv.appendChild(input);
+}
+function createPanel(){
+	clearMain();
+	var result = JSON.parse(this.responseText);
+	var makeTeamEle = document.createElement("input");
+	var makeTeamSize = document.createElement("input");
+	var makeTeam = document.createElement("button");
+	makeTeamEle.placeholder = "E";
+	makeTeamSize.placeholder = "Size";
+	makeTeam.value = "Create Team";
+	makeTeam.addEventListener("click", function(){
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "createteam?e="+encodeURIComponent(makeTeamEle.value)+"&s="+encodeURIComponent(makeTeamSize.value));
+		xhr.addEventListener("")
+	});
+	maindiv.appendChild(makeTeamEle);
+	maindiv.appendChild(makeTeamSize);
+	maindiv.appendChild(makeTeam);
+}
+requestAuth(localStorage.auth); // Could skip straight to createLoginForm if auth doesn't exist, but I'd rather write this comment
 </script>
