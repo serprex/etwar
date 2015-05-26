@@ -1,5 +1,6 @@
 <title>WM panel</title>
 <link rel="stylesheet" href="ui.css">
+<script src="util.js"></script>
 <!-- Have some auth that we send to server to verify in some gitignore dot file. Then expose creating a team, setting members of team, generating matches, inputting results, penalties -->
 <div id="maindiv"></div>
 <script>
@@ -36,7 +37,7 @@ function createPanel(){
 	makeTeam.value = "Create Team";
 	makeTeam.addEventListener("click", function(){
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "createteam?auth="+encodeURIComponent(localStorage.auth)+"e="+encodeURIComponent(makeTeamEle.value)+"&s="+encodeURIComponent(makeTeamSize.value));
+		xhr.open("GET", "createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value});
 		xhr.addEventListener("")
 	});
 	maindiv.appendChild(makeTeamEle);
