@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<title>Elements the War</title>
+<link rel="stylesheet" href="ui.css">
+<style>
+
+</style>
+<script src="util.js"></script>
+<script src="carddb.js"></script>
+<div id="maindiv"></div>
+<a id="selectlink" href="#">[Select]</a>
+<pre id="outcode"></pre>
+<script>
+(function(){
+	"use strict";
+	function updateCode(){
+		clearDiv(outcode);
+		var dcode = [];
+		cellMap.forEach(function(x){
+			var num = parseInt(x.input.value);
+			for(var i=0; i<num; i++){
+				dcode.push(x.code);
+			}
+		});
+		outcode.appendChild(document.createTextNode(dcode.join(" ")));
+	}
+	selectlink.addEventListener("click", function selectNode(){
+		var range = document.createRange();
+		range.selectNodeContents(outcode);
+		var sel = getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+	});
+	var cards = [], cellMap = [];
+	for(var i=0; i<13; i++) cards.push([]);
+	for(var code in Cards){
+		var card = Cards[code];
+		cards[card.element].push(card);
+	}
+	cards.forEach(function(clist){
+		clist.sort(function(x,y){return x.cost-y.cost});
+		var ediv = document.createElement("div");
+		clist.forEach(function(card){
+			if (card.upped) return;
+			var input = document.createElement("input");
+			input.className = "numput";
+			input.addEventListener("input", updateCode);
+			cellMap.push({input:input, code:card.code});
+			ediv.appendChild(document.createTextNode(card.name));
+			ediv.appendChild(input);
+			ediv.appendChild(document.createElement("br"))
+		});
+		maindiv.appendChild(ediv);
+	});
+})();
+</script>

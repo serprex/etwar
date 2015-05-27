@@ -1,8 +1,6 @@
 *{box-sizing:border-box}
 body{
 	background-color:black;
-	background-image:url(assets/bg_default.png);
-	background-repeat:no-repeat;
 	color:white;
 	margin:0;
 	font:16px Dosis;

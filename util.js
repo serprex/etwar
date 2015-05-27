@@ -7,6 +7,9 @@ function renderDeck(deck){
 	}
 	return div;
 }
+function clearDiv(div){
+	while (div.firstChild) div.firstChild.remove();
+}
 function mkQuery(opt){
 	var r=[];
 	for(var key in opt){

@@ -11,11 +11,8 @@ function requestAuth(pass){
 	xhr.open("GET", "wmlogin?auth="+encodeURIComponent(pass), true);
 	xhr.send();
 }
-function clearMain(){
-	while (maindiv.firstChild) maindiv.firstChild.remove();
-}
 function createLoginForm(){
-	clearMain();
+	clearDiv(maindiv);
 	document.createElement("input");
 	input.placeholder="auth";
 	input.addEventListener("keydown", function(e){
@@ -27,7 +24,7 @@ function createLoginForm(){
 	maindiv.appendChild(input);
 }
 function createPanel(){
-	clearMain();
+	clearDiv(maindiv);
 	var result = JSON.parse(this.responseText);
 	var makeTeamEle = document.createElement("input");
 	var makeTeamSize = document.createElement("input");
@@ -37,8 +34,9 @@ function createPanel(){
 	makeTeam.value = "Create Team";
 	makeTeam.addEventListener("click", function(){
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value});
-		xhr.addEventListener("")
+		xhr.open("GET", "createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value}));
+		//todo handle load
+		xhr.send();
 	});
 	maindiv.appendChild(makeTeamEle);
 	maindiv.appendChild(makeTeamSize);
