@@ -1,9 +1,10 @@
 var qs = require("querystring");
 module.exports = function(db){
 	return function(req, res, next){
-		var opt = qs.parse(req.query);
 		// TODO verify opt.auth
-		var ele = opt.e, elec = opt.s;
-		db.hsetall("E"+ele+":VAULT", /*TODO*/);
+		var opt = qs.parse(req.query), ele = opt.e;
+		db.hsetall("E"+ele+":VAULT", {elec: opt.s, ele: ele, cards: "", salvage: "", discard: "", salvagepool: "", discardpool: "", salvagecount: 0, discardcount: 0, relics: 0, psw: "nopass"});
+		db.lpush("E"+ele+":1:DECKS", "", "", "", "", "", "");
+		db.lpush("E"+ele+":1:SIDES", "", "", "", "", "", "");
 	}
 }
