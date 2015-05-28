@@ -28,14 +28,14 @@ function createPanel(){
 	var result = JSON.parse(this.responseText);
 	var makeTeamEle = document.createElement("input");
 	var makeTeamSize = document.createElement("input");
-	var makeTeam = document.createElement("button");
+	var makeTeam = document.createElement("input");
 	makeTeamEle.placeholder = "E";
 	makeTeamSize.placeholder = "Size";
+	makeTeam.type = "button";
 	makeTeam.value = "Create Team";
 	makeTeam.addEventListener("click", function(){
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", "createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value}));
-		//todo handle load
 		xhr.send();
 	});
 	maindiv.appendChild(makeTeamEle);
