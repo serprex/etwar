@@ -5,11 +5,17 @@ exports.parseOpts = function(req){
 exports.verifyAuth = function(req, cb){
 	var opts = exports.parseOpts(req);
 	var e = opts.e;
-	db.hget("E"+e+":VAULT", "psw", function(psw){
-		if (psw == opts.auth){
+	db.hget("E"+e+":VAULT", "psw", function(err, psw){
+		if (!err && psw == opts.auth){
 			cb(opts);
-		}else{
-			cb(null);
+		}
+	});
+}
+exports.verifyWmAuth = function(req, cb){
+	var opts = exports.parseOpts(req);
+	db.get("wmauth", function(err, psw){
+		if (!err && psw == opts.auth){
+			cb(opts);
 		}
 	});
 }
