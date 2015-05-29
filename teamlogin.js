@@ -1,5 +1,8 @@
+var sutil = require("./sutil");
 module.exports = function(db){
 	return function(req, res, next){
-		res.end("{}");
+		sutil.verifyAuth(db, req, function(opt){
+			res.end("{}");
+		});
 	}
 }

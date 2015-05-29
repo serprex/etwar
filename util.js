@@ -1,4 +1,4 @@
-function renderDeck(deck){
+function mkDeck(deck){
 	var div = document.createElement("div");
 	for(var i=0; i<deck.length; i+=70){
 		var img = new Image();
