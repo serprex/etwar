@@ -6,9 +6,10 @@
 <!-- Start with element select, once auth works save that as local setting. Otherwise go straight to deck management. No chat, standings is own url -->
 <script>
 function requestAuth(){
-	xhrSend("teamlogin?"+mkAuthQuery({}), createMainView, createLoginForm);
+	xhrSend("teamlogin?"+mkAuthQuery(), createMainView, createLoginForm);
 }
 function mkAuthQuery(query){
+	if (!query) query = {};
 	query.e = localStorage.team;
 	query.auth = localStorage.tauth;
 	return mkQuery(query);
@@ -47,9 +48,17 @@ function createMainView(){
 	viewVault.href = "#";
 	viewVault.appendChild(document.createTextNode("Vault"));
 	viewVault.addEventListener("click", function(){
-		xhrSend("viewvault?"+mkAuthQuery({}), createViewVault);
+		xhrSend("viewvault?"+mkAuthQuery(), createViewVault);
+	});
+	var viewDecks = document.createElement("a");
+	viewDecks.href = "#";
+	viewDecks.appendChild(document.createTextNode("Decks"));
+	viewDecks.addEventListener("click", function(){
+		xhrSend("getdecks?"+mkAuthQuery(), createViewDecks);
 	});
 	maindiv.appendChild(viewVault);
+	maindiv.appendChild(document.createElement("br"));
+	maindiv.appendChild(viewDecks);
 }
 function createViewVault(){
 	clearDiv(maindiv);
@@ -72,6 +81,16 @@ function createViewVault(){
 	maindiv.appendChild(vsubmit);
 	maindiv.appendChild(document.createElement("br"));
 	maindiv.appendChild(vimg);
+}
+function createViewDecks(){
+	clearDiv(maindiv);
+	var decks = JSON.parse(this.responseText);
+	decks.forEach(function(deck){
+		var main=deck[0], side=deck[1];
+		document.appendChild(mkDeck(main.split(" ")));
+		document.appendChild(mkDeck(side.split(" ")));
+		// TODO inputs to modify decks
+	});
 }
 requestAuth(); // Could skip straight to createLoginForm if auth doesn't exist, but I'd rather write this comment
 </script>
