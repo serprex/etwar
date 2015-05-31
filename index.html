@@ -67,7 +67,7 @@ function createViewVault(){
 			// Print errors, update deck image
 		});
 	});
-	var vimg = mkDeck(vault.cards);
+	var vimg = mkDeck(vault.cards.split(" "));
 	maindiv.appendChild(vin);
 	maindiv.appendChild(vsubmit);
 	maindiv.appendChild(document.createElement("br"));
