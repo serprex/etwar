@@ -3,26 +3,16 @@ module.exports = function(db){
 	return function(req, res, next){
 		sutil.verifyAuth(db, req, function(opt){
 			// TODO figure out getdecks for not-round-1 & figure out more about recording deck history
-			var deckdata = [], lcounter = 0;
-			function postBoth(){
-				if (++lcounter == 2){
-					res.end(JSON.stringify(deckdata));
+			var task = sutil.mkTask(function(result){
+				var data = [];
+				for(var i=0; i<result.decks.length; i++){
+					data.push([result.decks[i], result.sides[i]]);
 				}
-			}
-			db.lrange("E"+opt.e+":1:DECKS", 0, 10, function(err, decks){
-				decks.forEach(function(deck, i){
-					if (!deckdata[i]) deckdata[i] = [deck, ""];
-					else deckdata[i][0] = deck;
-				});
-				postBoth();
+				res.end(JSON.stringify(data));
 			});
-			db.lrange("E"+opt.e+":1:SIDES", 0, 10, function(err, decks){
-				decks.forEach(function(deck, i){
-					if (!deckdata[i]) deckdata[i] = ["", deck];
-					else deckdata[i][1] = deck;
-				});
-				postBoth();
-			});
+			db.lrange("E"+opt.e+":1:DECKS", 0, -1, task("decks"));
+			db.lrange("E"+opt.e+":1:SIDES", 0, -1, task("sides"));
+			task();
 		});
 	}
 }

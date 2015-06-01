@@ -1,15 +1,16 @@
+var sutil = require("./sutil");
 module.exports = function(db){
 	return function(req, res, next){
-		var standings = new Array(12), hgcounter = 0;
+		var task = sutil.mkTask(function(result){
+			var data = []; // Convert object to array
+			for(var i=0; i<12; i++){
+				data.push(result[i]);
+			}
+			res.end(JSON.stringify(data));
+		});
 		for(var i=0; i<12; i++){
-			(function(i){
-				db.hget("E"+(i+1)+":VAULT", "cards", function(err, cards){
-					standings[i] = cards.split(" ").length;
-					if (++hgcounter == 12){
-						res.end(JSON.stringify(standings));
-					}
-				});
-			})(i);
+			db.hget("E"+(i+1)+":VAULT", "cards", task(i));
 		}
+		task();
 	}
 }
