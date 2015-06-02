@@ -6,21 +6,26 @@ td{width:200px}
 </style>
 <script src="util.js"></script>
 <script src="carddb.js"></script>
-<pre id="outcode">Click to select</pre>
+<pre id="outcost"></pre> <pre id="outcode">Click to select</pre>
 <table id="maindiv0"></table>
 <table id="maindiv1"></table>
 <script>
 (function(){
 	"use strict";
 	function updateCode(){
+		clearDiv(outcost);
 		clearDiv(outcode);
-		var dcode = [];
+		var dcode = [], cost = 0;
 		cellMap.forEach(function(x){
 			var num = parseInt(x.input.value);
-			for(var i=0; i<num; i++){
-				dcode.push(x.code);
+			if (num){
+				cost += Cards[x.code].tier * num;
+				for(var i=0; i<num; i++){
+					dcode.push(x.code);
+				}
 			}
 		});
+		outcost.appendChild(document.createTextNode(cost));
 		outcode.appendChild(document.createTextNode(dcode.join(" ")));
 	}
 	outcode.addEventListener("click", function selectNode(){
