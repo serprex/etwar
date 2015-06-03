@@ -85,11 +85,29 @@ function createViewVault(){
 function createViewDecks(){
 	clearDiv(maindiv);
 	var decks = JSON.parse(this.responseText);
-	decks.forEach(function(deck){
+	decks.forEach(function(deck, i){
 		var main=deck[0], side=deck[1];
+		var inputdeck = document.createElement("input");
+		var inputside = document.createElement("input");
+		var submit = document.createElement("input");
+		inputdeck.placeholder = "Deck";
+		inputside.placeholder = "Side";
+		submit.addEventListener("click", function(){
+			xhrSend("setdeck?"+mkAuthQuery({n:i, deck:inputdeck.value, side:inputside.value}));
+		});
+		submit.value = "Submit";
+		document.appendChild(document.createTextNode("Deck " + (i+1)));
+		document.appendChild(document.createElement("br"));
 		document.appendChild(mkDeck(main.split(" ")));
+		document.appendChild(document.createElement("br"));
+		document.appendChild(inputdeck);
+		document.appendChild(document.createElement("br"));
 		document.appendChild(mkDeck(side.split(" ")));
-		// TODO inputs to modify decks
+		document.appendChild(document.createElement("br"));
+		document.appendChild(inputside);
+		document.appendChild(document.createElement("br"));
+		document.appendChild(submit);
+		document.appendChild(document.createElement("br"));
 	});
 }
 requestAuth(); // Could skip straight to createLoginForm if auth doesn't exist, but I'd rather write this comment
