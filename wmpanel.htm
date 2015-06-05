@@ -5,11 +5,7 @@
 <div id="maindiv"></div>
 <script>
 function requestAuth(pass){
-	var xhr = new XMLHttpRequest();
-	xhr.addEventListener("error", createLoginForm);
-	xhr.addEventListener("load", createPanel);
-	xhr.open("GET", "wmlogin?auth="+encodeURIComponent(pass), true);
-	xhr.send();
+	xhrSend("wmlogin?auth="+encodeURIComponent(pass), createPanel, createLoginForm);
 }
 function createLoginForm(){
 	clearDiv(maindiv);
@@ -38,9 +34,26 @@ function createPanel(){
 		xhr.open("GET", "createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value}));
 		xhr.send();
 	});
+	var viewMatches = document.createElement("a");
+	a.href = "#";
+	a.addEventListener("click", function(){
+		xhrSend("viewmatches", createMatchView);
+	});
 	maindiv.appendChild(makeTeamEle);
 	maindiv.appendChild(makeTeamSize);
 	maindiv.appendChild(makeTeam);
+	maindiv.appendChild(document.createElement("br"));
+	maindiv.appendChild(viewMatches);
+}
+function createMatchView(){
+	clearDiv(maindiv);
+	var matches = JSON.parse(this.responseText);
+	matches.forEach(function(match){
+		var team1 = match&15, mem1 = (match>>4)&15, team2 = (match>>8)&15, mem2 = match>>12;
+		maindiv.appendChild(document.createTextNode(team1 + ":" + mem1 + " vs " + team2 + ":" + mem2));
+		//TODO include result input
+		maindiv.appendChild(document.createElement("br"));
+	});
 }
 requestAuth(localStorage.auth); // Could skip straight to createLoginForm if auth doesn't exist, but I'd rather write this comment
 </script>
