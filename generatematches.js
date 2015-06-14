@@ -30,10 +30,11 @@ module.exports = sutil.verifyWmAuth(function(opt, req, res, db){
 				}
 			}
 		}
-		db.rpush("R"+(parseInt(data.round)+1), matches);
+		db.rpush("R"+data.round, matches);
 	});
-	db.get("ROUND", task("round"));
+	db.incr("ROUND", task("round"));
 	for(var i=0; i<12; i++){
 		db.hgetall("E"+i+":VAULT", task(i));
 	}
+	task();
 });
