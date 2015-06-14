@@ -4,6 +4,11 @@
 <!-- Have some auth that we send to server to verify in some gitignore dot file. Then expose creating a team, setting members of team, generating matches, inputting results, penalties -->
 <div id="maindiv"></div>
 <script>
+function mkAuthQuery(query){
+	if (!query) query = {};
+	query.auth = localStorage.auth;
+	return mkQuery(query);
+}
 function requestAuth(pass){
 	xhrSend("wmlogin?auth="+encodeURIComponent(pass), createPanel, createLoginForm);
 }
@@ -22,30 +27,49 @@ function createLoginForm(){
 function createPanel(){
 	clearDiv(maindiv);
 	var result = JSON.parse(this.responseText);
-	var makeTeamEle = document.createElement("input");
-	var makeTeamSize = document.createElement("input");
-	var makeTeam = document.createElement("input");
-	makeTeamEle.placeholder = "E";
-	makeTeamSize.placeholder = "Size";
-	makeTeam.type = "button";
-	makeTeam.value = "Create Team";
-	makeTeam.addEventListener("click", function(){
-		xhrSend("createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value}));
-	});
+	if (result == 0){
+		var tputs = [];
+		var tbl = document.createElement("table");
+		for(var i=0; i<12; i++){
+			var tr = document.createElement("tr");
+			var makeTeamSize = document.createElement("input");
+			makeTeamSize.placeholder = "Size";
+			var td0 = document.createElement("td"), td1 = document.createElement("td");
+			td0.appendChild(document.createTextNode(Enames[i+1]));
+			td1.appendChild(makeTeamSize);
+			tr.appendChild(td0);
+			tr.appendChild(td1);
+			tbl.appendChild(tr);
+			tputs.push(makeTeamSize);
+		}
+		maindiv.appendChild(tbl);
+		makeTeam.type = "button";
+		makeTeam.value = "Create Teams";
+		makeTeam.addEventListener("click", function(){
+			xhrSend("createteam?"+mkQuery({auth:localStorage.auth, s:tputs.map(function(x){return parseInt(x.value)})}));
+		});
+		maindiv.appendChild(makeTeam);
+		maindiv.appendChild(document.createElement("br"));
+	}
 	var viewMatches = document.createElement("a");
 	viewMatches.href = "#";
 	viewMatches.addEventListener("click", function(){
-		xhrSend("viewmatches", createMatchView);
+		xhrSend("viewmatches?"+mkAuthQuery(), createMatchView);
 	});
-	maindiv.appendChild(makeTeamEle);
-	maindiv.appendChild(makeTeamSize);
-	maindiv.appendChild(makeTeam);
-	maindiv.appendChild(document.createElement("br"));
+	viewMatches.appendChild(document.createTextNode("View Matches"));
 	maindiv.appendChild(viewMatches);
 }
 function createMatchView(){
 	clearDiv(maindiv);
 	var matches = JSON.parse(this.responseText);
+	var nextRound = document.createElement("input");
+	nextRound.type = "button";
+	nextRound.value = "Next Round";
+	nextRound.addEventListener("click", function(){
+		xhrSend("generatematches?"+mkAuthQuery(), createMatchView);
+	});
+	maindiv.appendChild(nextRound);
+	maindiv.appendChild(document.createElement("br"));
 	matches.forEach(function(match){
 		var team1 = match&15, mem1 = (match>>4)&15, team2 = (match>>8)&15, mem2 = match>>12;
 		maindiv.appendChild(document.createTextNode(team1 + ":" + mem1 + " vs " + team2 + ":" + mem2));
