@@ -60,3 +60,8 @@ exports.verifyWmAuth = function(func){
 		}
 	}
 }
+exports.noVerify = function(func){
+	return function(req, res, next){
+		func(exports.parseOpt(req), req, res, exports.db);
+	}
+}
