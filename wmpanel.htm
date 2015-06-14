@@ -4,6 +4,7 @@
 <!-- Have some auth that we send to server to verify in some gitignore dot file. Then expose creating a team, setting members of team, generating matches, inputting results, penalties -->
 <div id="maindiv"></div>
 <script>
+var round;
 function mkAuthQuery(query){
 	if (!query) query = {};
 	query.auth = localStorage.auth;
@@ -26,8 +27,8 @@ function createLoginForm(){
 }
 function createPanel(){
 	clearDiv(maindiv);
-	var result = JSON.parse(this.responseText);
-	if (result == 0){
+	round = JSON.parse(this.responseText);
+	if (round == 0){
 		var tputs = [];
 		var tbl = document.createElement("table");
 		for(var i=0; i<12; i++){
@@ -51,14 +52,34 @@ function createPanel(){
 		});
 		maindiv.appendChild(makeTeam);
 		maindiv.appendChild(document.createElement("br"));
+	}else{
+		var viewMatches = document.createElement("a");
+		viewMatches.href = "#";
+		viewMatches.addEventListener("click", function(){
+			xhrSend("viewmatches?"+mkAuthQuery({r:round}), createMatchView);
+		});
+		viewMatches.appendChild(document.createTextNode("View Matches"));
+		maindiv.appendChild(viewMatches);
+		for(var i=1; i<round; i++){
+			(function(i){
+				var viewOldMatches = document.createElement("a");
+				viewOldMatches.href = "#";
+				viewOldMatches.addEventListener("click", function(){
+					xhrSend("viewmatches?"+mkAuthQuery({r:i}), function(){
+						clearDiv(maindiv);
+						var matches = JSON.parse(this.responseText);
+						matches.forEach(function(match){
+							var team1 = match&15, mem1 = (match>>4)&15, team2 = (match>>8)&15, mem2 = match>>12;
+							maindiv.appendChild(document.createTextNode(team1 + ":" + mem1 + " vs " + team2 + ":" + mem2));
+							//TODO perhaps add a mechanism to void
+							maindiv.appendChild(document.createElement("br"));
+						});
+					});
+				});
+				maindiv.appendChild(viewOldMatches);
+			})(i);
+		}
 	}
-	var viewMatches = document.createElement("a");
-	viewMatches.href = "#";
-	viewMatches.addEventListener("click", function(){
-		xhrSend("viewmatches?"+mkAuthQuery(), createMatchView);
-	});
-	viewMatches.appendChild(document.createTextNode("View Matches"));
-	maindiv.appendChild(viewMatches);
 }
 function createMatchView(){
 	clearDiv(maindiv);
