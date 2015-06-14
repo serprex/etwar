@@ -26,10 +26,12 @@ function mkQuery(opt){
 }
 function xhrSend(url, onload, onerror){
 	var xhr = new XMLHttpRequest();
-	xhr.addEventListener("load", function(){
-		if (this.status == 200) onload.call(this);
-		else if (onerror) onerror.call(this);
-	});
+	if (onload){
+		xhr.addEventListener("load", function(){
+			if (this.status == 200) onload.call(this);
+			else if (onerror) onerror.call(this);
+		});
+	}
 	if (onerror) xhr.addEventListener("error", onerror);
 	xhr.open("GET", url, true);
 	xhr.send();

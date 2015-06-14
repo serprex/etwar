@@ -25,19 +25,38 @@ exports.mkTask = function(cb){
 exports.parseOpt = function(req){
 	return qs.parse(req.url.slice(2));
 }
-exports.verifyAuth = function(db, req, cb){
-	var opt = exports.parseOpt(req), e = opt.e;
-	db.hget("E"+e+":VAULT", "psw", function(err, psw){
-		if (!err && psw == opt.auth){
-			cb(opt);
+exports.db = null;
+var wmauth = null;
+exports.init = function(cb){
+	exports.db = require("redis").createClient();
+	exports.db.get("wmauth", function(err, psw){
+		if (!err){
+			wmauth = psw;
+			cb();
 		}
 	});
 }
-exports.verifyWmAuth = function(db, req, cb){
-	var opt = exports.parseOpt(req);
-	db.get("wmauth", function(err, psw){
-		if (!err && psw == opt.auth){
-			cb(opt);
+exports.verifyAuth = function(func){
+	return function(req, res, next){
+		var opt = exports.parseOpt(req);
+		exports.db.hget("E"+opt.e+":VAULT", "psw", function(err, psw){
+			if (!err && psw == opt.auth){
+				func(opt, req, res, exports.db);
+			}else{
+				res.writeHead(403);
+				res.end();
+			}
+		});
+	}
+}
+exports.verifyWmAuth = function(func){
+	return function(req, res, next){
+		var opt = exports.parseOpt(req);
+		if (opt.auth == wmauth){
+			func(opt, req, res, exports.db);
+		}else{
+			res.writeHead(403);
+			res.end();
 		}
-	});
+	}
 }

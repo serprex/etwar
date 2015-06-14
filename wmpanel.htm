@@ -9,7 +9,7 @@ function requestAuth(pass){
 }
 function createLoginForm(){
 	clearDiv(maindiv);
-	document.createElement("input");
+	var input = document.createElement("input");
 	input.placeholder="auth";
 	input.addEventListener("keydown", function(e){
 		if (e.keyCode == 13){
@@ -30,13 +30,11 @@ function createPanel(){
 	makeTeam.type = "button";
 	makeTeam.value = "Create Team";
 	makeTeam.addEventListener("click", function(){
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value}));
-		xhr.send();
+		xhrSend("createteam?"+mkQuery({auth:localStorage.auth, e:makeTeamEle.value, s:makeTeamSize.value}));
 	});
 	var viewMatches = document.createElement("a");
-	a.href = "#";
-	a.addEventListener("click", function(){
+	viewMatches.href = "#";
+	viewMatches.addEventListener("click", function(){
 		xhrSend("viewmatches", createMatchView);
 	});
 	maindiv.appendChild(makeTeamEle);
