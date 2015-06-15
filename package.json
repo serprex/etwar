@@ -15,5 +15,8 @@
   "optionalDependencies": {
     "hiredis": "^0.3.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "urllib": "^2.3.8"
+  }
 }
