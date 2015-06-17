@@ -2,7 +2,7 @@
 "use strict";
 var fs = require("fs"), urllib = require("urllib");
 function download(gid, writeStream, cb){
-	urllib.request("https://docs.google.com/spreadsheets/d/1GXFJ19tymWHzgnxj6ltAvMI4VnluE1DShsNk9SjbZVg&gid="+gid, {
+	urllib.request("https://docs.google.com/spreadsheets/d/1GXFJ19tymWHzgnxj6ltAvMI4VnluE1DShsNk9SjbZVg/export?format=csv&gid="+gid, {
 		headers: { "GData-Version": "3.0" },
 		writeStream: writeStream
 	}, cb);

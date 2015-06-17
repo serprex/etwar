@@ -2,7 +2,8 @@
 <title>Elements the War</title>
 <link rel="stylesheet" href="ui.css">
 <style>
-td{width:200px}
+table{width:996px;table-layout:fixed;}
+td{width:166px}
 </style>
 <script src="util.js"></script>
 <script src="carddb.js"></script>
@@ -19,7 +20,7 @@ td{width:200px}
 		cellMap.forEach(function(x){
 			var num = parseInt(x.input.value);
 			if (num){
-				cost += Cards[x.code].tier * num;
+				cost += Cards[x.code].price * num;
 				for(var i=0; i<num; i++){
 					dcode.push(x.code);
 				}
@@ -38,8 +39,10 @@ td{width:200px}
 	var cards = [], cellMap = [];
 	for(var i=0; i<13; i++) cards.push([]);
 	for(var code in Cards){
-		var card = Cards[code];
-		cards[card.element].push(card);
+		if (!isUpped(code)){
+			var card = Cards[code];
+			if (card.type) cards[card.ele].push(card);
+		}
 	}
 	cards.forEach(function(clist, i){
 		clist.sort(function(x,y){return x.cost-y.cost});

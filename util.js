@@ -36,4 +36,7 @@ function xhrSend(url, onload, onerror){
 	xhr.open("GET", url, true);
 	xhr.send();
 }
+function isUpped(code){
+	return code>="6qo";
+}
 var Enames = ["Underworld", "Entropy", "Death", "Gravity", "Earth", "Life", "Fire", "Water", "Light", "Air", "Time", "Darkness", "Aether"];
