@@ -48,7 +48,7 @@ function createPanel(){
 		makeTeam.type = "button";
 		makeTeam.value = "Create Teams";
 		makeTeam.addEventListener("click", function(){
-			xhrSend("createteam?"+mkQuery({auth:localStorage.auth, s:tputs.map(function(x){return parseInt(x.value)})}));
+			xhrSend("createteam?"+mkQuery({auth:localStorage.auth, s:tputs.map(function(x){return parseInt(x.value)})}), createMatchView);
 		});
 		maindiv.appendChild(makeTeam);
 		maindiv.appendChild(document.createElement("br"));

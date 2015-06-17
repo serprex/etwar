@@ -4,11 +4,11 @@ module.exports = sutil.verifyWmAuth(function(opt, req, res, db){
 		var matches = [], memberlists = [];
 		for(var i=0; i<12; i++){
 			var count = result[i].cards.split(" ").length;
-			var members = count < 75 ? 0 :
-				count < 110 ? 2 :
-				count < 145 ? 3 :
-				count < 180 ? 4 :
-				count < 215 ? 5 : 6;
+			var members = count < 60 ? 0 :
+				count < 90 ? 2 :
+				count < 120 ? 3 :
+				count < 150 ? 4 :
+				count < 180 ? 5 : 6;
 			memberlists[i] = new Array(members);
 		}
 		for(var i=0; i<12; i++){
@@ -30,11 +30,13 @@ module.exports = sutil.verifyWmAuth(function(opt, req, res, db){
 				}
 			}
 		}
-		db.rpush("R"+data.round, matches);
+		db.rpush("R"+result.round, matches, function(err){
+			if (!err) res.end(JSON.stringify(matches));
+		});
 	});
 	db.incr("ROUND", task("round"));
 	for(var i=0; i<12; i++){
-		db.hgetall("E"+i+":VAULT", task(i));
+		db.hgetall("E"+(i+1)+":VAULT", task(i));
 	}
 	task();
 });
