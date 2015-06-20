@@ -26,7 +26,7 @@ module.exports = sutil.verifyWmAuth(function(opt, req, res, db){
 					var chosen = candidates[Math.floor(Math.random()*candidates.length)];
 					memberlists[i][j] = chosen;
 					memberlists[chosen[0]][chosen[1]] = [i, j];
-					matches.push(i|j<<4|chosen[0]<<8|chosen[1]<<12);
+					matches.push(i|j<<4|chosen[0]<<8|chosen[1]<<12|0xFF0000);
 				}
 			}
 		}
