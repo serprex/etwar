@@ -92,10 +92,20 @@ function createMatchView(){
 	});
 	maindiv.appendChild(nextRound);
 	maindiv.appendChild(document.createElement("br"));
-	matches.forEach(function(match){
-		var team1 = match&15, mem1 = (match>>4)&15, team2 = (match>>8)&15, mem2 = match>>12;
-		maindiv.appendChild(document.createTextNode(team1 + ":" + mem1 + " vs " + team2 + ":" + mem2));
-		//TODO include result input
+	matches.forEach(function(match, i){
+		var mres = parseMatch(match);
+		var txtNode = document.createTextNode(matchToString(mres));
+		maindiv.appendChild(txtNode);
+		var resin = document.createElement("input");
+		resin.placeholder = "Result";
+		resin.addEventListener("keydown", function(e){
+			if (e.keyCode == 13){
+				var result = this.value.split("-");
+				xhrSend("setmatch?"+mkAuthQuery({r:round, n:i, t1:result[0], t2:result[1]}), function(){
+					txtNode.data = matchToString(parseMatch(parseInt(this.responseText)));
+				});
+			}
+		});
 		maindiv.appendChild(document.createElement("br"));
 	});
 }
