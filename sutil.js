@@ -66,3 +66,7 @@ exports.noVerify = function(func){
 		func(exports.parseOpt(req), req, res, exports.db);
 	}
 }
+exports.reject = function(res){
+	res.writeHead(403);
+	res.end();
+}

@@ -5,7 +5,7 @@ module.exports = sutil.verifyAuth(function(opt, req, res, db){
 		var cards = opt.cards.split(" "), cost = 0;
 		cards.forEach(function(code){
 			var card = Cards[code];
-			if (code < "6qo" && code != "4t9" && card && card.type){
+			if (code < "6qo" && card && card.price && card.type){
 				cost += card.price;
 			}else{
 				cost += vault.elec;
@@ -17,8 +17,7 @@ module.exports = sutil.verifyAuth(function(opt, req, res, db){
 				if (!err) res.end(JSON.stringify(opt.cards));
 			});
 		}else{
-			res.writeHead(403);
-			res.end();
+			sutil.reject(res);
 		}
 	});
 });

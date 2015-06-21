@@ -14,8 +14,7 @@ sutil.init(function(){
 	app.listen(80);
 	function hiderdb(req, res, next){
 		if (req.url.slice(-4) == ".rdb"){
-			res.writeHead(403);
-			res.end();
+			sutil.reject(res);
 		}else{
 			next();
 		}

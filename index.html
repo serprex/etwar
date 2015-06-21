@@ -81,17 +81,23 @@ function createViewDecks(){
 	ui.clearDiv(maindiv);
 	var decks = JSON.parse(this.responseText);
 	decks.forEach(function(deck, i){
-		var main=deck[0], side=deck[1];
+		var main=deck[0], side=deck[1], role = deck[2];
 		var inputdeck = document.createElement("input");
 		var inputside = document.createElement("input");
-		var submit = document.createElement("input");
+		var inputrole = document.createElement("input");
 		inputdeck.placeholder = "Deck";
 		inputside.placeholder = "Side";
+		inputrole.placeholder = "Role";
+		inputdeck.value = main;
+		inputside.value = side;
+		inputrole.value = role;
+		var submit = document.createElement("input");
 		submit.addEventListener("click", function(){
-			ui.xhrSend("setdeck?"+mkAuthQuery({n:i, deck:inputdeck.value, side:inputside.value}));
+			ui.xhrSend("setdeck?"+mkAuthQuery({n:i, deck:inputdeck.value, side:inputside.value, role:inputrole.value}));
 		});
 		submit.value = "Submit";
 		maindiv.appendChild(document.createTextNode("Deck " + (i+1)));
+		maindiv.appendChild(inputrole);
 		maindiv.appendChild(document.createElement("br"));
 		maindiv.appendChild(ui.mkDeck(main.split(" ")));
 		maindiv.appendChild(document.createElement("br"));

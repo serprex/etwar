@@ -1,6 +1,6 @@
 <title>WM panel</title>
 <link rel="stylesheet" href="ui.css">
-<script src="util.js"></script>
+<script src="browser.js"></script>
 <!-- Have some auth that we send to server to verify in some gitignore dot file. Then expose creating a team, setting members of team, generating matches, inputting results, penalties -->
 <div id="maindiv"></div>
 <script>
@@ -17,7 +17,7 @@ function requestAuth(pass){
 	ui.xhrSend("wmlogin?auth="+encodeURIComponent(pass), createPanel, createLoginForm);
 }
 function createLoginForm(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	var input = document.createElement("input");
 	input.placeholder="auth";
 	input.addEventListener("keydown", function(e){
@@ -29,7 +29,7 @@ function createLoginForm(){
 	maindiv.appendChild(input);
 }
 function createPanel(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	round = JSON.parse(this.responseText);
 	if (round == 0){
 		var tputs = [];
@@ -69,7 +69,7 @@ function createPanel(){
 				viewOldMatches.href = "#";
 				viewOldMatches.addEventListener("click", function(){
 					ui.xhrSend("viewmatches?"+mkAuthQuery({r:i}), function(){
-						clearDiv(maindiv);
+						ui.clearDiv(maindiv);
 						var matches = JSON.parse(this.responseText);
 						matches.forEach(function(match){
 							var team1 = match&15, mem1 = (match>>4)&15, team2 = (match>>8)&15, mem2 = match>>12;
@@ -85,13 +85,16 @@ function createPanel(){
 	}
 }
 function createMatchView(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	var matches = JSON.parse(this.responseText);
 	var nextRound = document.createElement("input");
 	nextRound.type = "button";
 	nextRound.value = "Next Round";
 	nextRound.addEventListener("click", function(){
-		ui.xhrSend("generatematches?"+mkAuthQuery(), createMatchView);
+		ui.xhrSend("generatematches?"+mkAuthQuery(), function(){
+			round++;
+			createMatchView.call(this);
+		});
 	});
 	maindiv.appendChild(nextRound);
 	maindiv.appendChild(document.createElement("br"));

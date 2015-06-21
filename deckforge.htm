@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<title>Elements the War</title>
+<title>Deckforge</title>
 <link rel="stylesheet" href="ui.css">
 <style>
-table{width:996px;table-layout:fixed;}
-td{width:166px}
+table{width:1020px;table-layout:fixed;}
+td{width:170px}
 </style>
-<script src="util.js"></script>
-<script src="carddb.js"></script>
+<script src="browser.js"></script>
 <pre id="outcost"></pre> <pre id="outcode">Click to select</pre>
 <table id="maindiv0"></table>
 <table id="maindiv1"></table>
 <script>
 (function(){
 	"use strict";
+	var ui = require("./ui");
+	var util = require("./util");
+	var Cards = require("./Cards");
 	function updateCode(){
-		clearDiv(outcost);
-		clearDiv(outcode);
+		ui.clearDiv(outcost);
+		ui.clearDiv(outcode);
 		var dcode = [], cost = 0;
 		cellMap.forEach(function(x){
 			var num = parseInt(x.input.value);
@@ -39,7 +41,7 @@ td{width:166px}
 	var cards = [], cellMap = [];
 	for(var i=0; i<13; i++) cards.push([]);
 	for(var code in Cards){
-		if (!isUpped(code)){
+		if (!util.isUpped(code)){
 			var card = Cards[code];
 			if (card.type) cards[card.ele].push(card);
 		}
@@ -47,6 +49,7 @@ td{width:166px}
 	cards.forEach(function(clist, i){
 		clist.sort(function(x,y){return x.cost-y.cost});
 		var ediv = document.createElement("td");
+		ediv.style.backgroundColor = ["#a99683", "#aa5999", "#636069", "#996633", "#5f4930", "#50a005", "#cc6611", "#205080", "#999990", "#337ddd", "#bfa622", "#333333", "#55aacc"][i];
 		clist.forEach(function(card){
 			if (card.upped) return;
 			var tr = document.createElement("tr");
