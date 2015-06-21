@@ -10,7 +10,7 @@ var task = sutil.mkTask(function(res){
 			var row = csv[i].split(",");
 			var card = carddb[row[2]] = {type:type};
 			keys.forEach(function(key, i){
-				card[key] = row[i];
+				card[key] = i==1 || i==2 ? row[i] : parseInt(row[i]);
 			});
 		}
 	});

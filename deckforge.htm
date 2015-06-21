@@ -43,7 +43,7 @@ td{width:170px}
 	for(var code in Cards){
 		if (!util.isUpped(code)){
 			var card = Cards[code];
-			if (card.type) cards[card.ele].push(card);
+			if (card.price) cards[card.ele].push(card);
 		}
 	}
 	cards.forEach(function(clist, i){

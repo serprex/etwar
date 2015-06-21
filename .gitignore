@@ -2,6 +2,7 @@ node_modules/*
 favicon.png
 .ninja_log
 .ninja_deps
+browser.js
 *.csv
 *.exe
 *.gz
