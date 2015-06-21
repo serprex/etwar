@@ -1,10 +1,10 @@
 var sutil = require("./sutil");
-var carddb = require("./carddb");
+var Cards = require("./Cards");
 module.exports = sutil.verifyAuth(function(opt, req, res, db){
 	db.hgetall("E"+opt.e+":VAULT", function(err, vault){
 		var cards = opt.cards.split(" "), cost = 0;
 		cards.forEach(function(code){
-			var card = carddb[code];
+			var card = Cards[code];
 			if (code < "6qo" && code != "4t9" && card && card.type){
 				cost += card.price;
 			}else{

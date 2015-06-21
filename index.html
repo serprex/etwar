@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <title>Elements the War</title>
 <link rel="stylesheet" href="ui.css">
-<script src="util.js"></script>
+<script src="browser.js"></script>
 <div id="maindiv"></div>
 <!-- Start with element select, once auth works save that as local setting. Otherwise go straight to deck management. No chat, standings is own url -->
 <script>
+var ui = require("./ui");
+var util = require("./util");
+var Cards = require("./Cards");
 function requestAuth(){
-	xhrSend("teamlogin?"+mkAuthQuery(), createMainView, createLoginForm);
+	ui.xhrSend("teamlogin?"+mkAuthQuery(), createMainView, createLoginForm);
 }
 function mkAuthQuery(query){
 	if (!query) query = {};
 	query.e = localStorage.team;
 	query.auth = localStorage.tauth;
-	return mkQuery(query);
+	return ui.mkQuery(query);
 }
 function createLoginForm(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	var team = document.createElement("input");
 	var pswd = document.createElement("input");
 	team.placeholder="team";
@@ -33,25 +36,25 @@ function createLoginForm(){
 	maindiv.appendChild(pswd);
 }
 function createMainView(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	var viewVault = document.createElement("a");
 	viewVault.href = "#";
 	viewVault.appendChild(document.createTextNode("Vault"));
 	viewVault.addEventListener("click", function(){
-		xhrSend("viewvault?"+mkAuthQuery(), createViewVault);
+		ui.xhrSend("viewvault?"+mkAuthQuery(), createViewVault);
 	});
 	var viewDecks = document.createElement("a");
 	viewDecks.href = "#";
 	viewDecks.appendChild(document.createTextNode("Decks"));
 	viewDecks.addEventListener("click", function(){
-		xhrSend("getdecks?"+mkAuthQuery(), createViewDecks);
+		ui.xhrSend("getdecks?"+mkAuthQuery(), createViewDecks);
 	});
 	maindiv.appendChild(viewVault);
 	maindiv.appendChild(document.createElement("br"));
 	maindiv.appendChild(viewDecks);
 }
 function createViewVault(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	var vault = JSON.parse(this.responseText);
 	// Need to somewhere specify round & only allow setting vault during R0
 	var vin = document.createElement("input");
@@ -61,19 +64,19 @@ function createViewVault(){
 	vsubmit.type = "button";
 	vsubmit.value = "Submit";
 	vsubmit.addEventListener("click", function(){
-		xhrSend("setvault?"+mkAuthQuery({cards:vin.value}), function(){
+		ui.xhrSend("setvault?"+mkAuthQuery({cards:vin.value}), function(){
 			var result = this.responseText;
 			// Print errors, update deck image
 		});
 	});
-	var vimg = mkDeck(vault.cards.split(" "));
+	var vimg = ui.mkDeck(vault.cards.split(" "));
 	maindiv.appendChild(vin);
 	maindiv.appendChild(vsubmit);
 	maindiv.appendChild(document.createElement("br"));
 	maindiv.appendChild(vimg);
 }
 function createViewDecks(){
-	clearDiv(maindiv);
+	ui.clearDiv(maindiv);
 	var decks = JSON.parse(this.responseText);
 	decks.forEach(function(deck, i){
 		var main=deck[0], side=deck[1];
@@ -83,21 +86,21 @@ function createViewDecks(){
 		inputdeck.placeholder = "Deck";
 		inputside.placeholder = "Side";
 		submit.addEventListener("click", function(){
-			xhrSend("setdeck?"+mkAuthQuery({n:i, deck:inputdeck.value, side:inputside.value}));
+			ui.xhrSend("setdeck?"+mkAuthQuery({n:i, deck:inputdeck.value, side:inputside.value}));
 		});
 		submit.value = "Submit";
-		document.appendChild(document.createTextNode("Deck " + (i+1)));
-		document.appendChild(document.createElement("br"));
-		document.appendChild(mkDeck(main.split(" ")));
-		document.appendChild(document.createElement("br"));
-		document.appendChild(inputdeck);
-		document.appendChild(document.createElement("br"));
-		document.appendChild(mkDeck(side.split(" ")));
-		document.appendChild(document.createElement("br"));
-		document.appendChild(inputside);
-		document.appendChild(document.createElement("br"));
-		document.appendChild(submit);
-		document.appendChild(document.createElement("br"));
+		maindiv.appendChild(document.createTextNode("Deck " + (i+1)));
+		maindiv.appendChild(document.createElement("br"));
+		maindiv.appendChild(ui.mkDeck(main.split(" ")));
+		maindiv.appendChild(document.createElement("br"));
+		maindiv.appendChild(inputdeck);
+		maindiv.appendChild(document.createElement("br"));
+		maindiv.appendChild(ui.mkDeck(side.split(" ")));
+		maindiv.appendChild(document.createElement("br"));
+		maindiv.appendChild(inputside);
+		maindiv.appendChild(document.createElement("br"));
+		maindiv.appendChild(submit);
+		maindiv.appendChild(document.createElement("br"));
 	});
 }
 requestAuth(); // Could skip straight to createLoginForm if auth doesn't exist, but I'd rather write this comment

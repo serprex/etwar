@@ -1,0 +1,4 @@
+rule mkcjs
+ command=mkcjs $out $in
+build browser.js:mkcjs Cards.js ui.js util.js
+default browser.js
