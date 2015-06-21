@@ -66,7 +66,9 @@ function createViewVault(){
 	vsubmit.addEventListener("click", function(){
 		ui.xhrSend("setvault?"+mkAuthQuery({cards:vin.value}), function(){
 			var result = this.responseText;
-			// Print errors, update deck image
+			vin.value = result;
+			ui.clearDiv(vimg);
+			ui.mkDeck(result.split(" "), vimg);
 		});
 	});
 	var vimg = ui.mkDeck(vault.cards.split(" "));

@@ -1,6 +1,6 @@
 "use strict";
-exports.mkDeck = function(deck){
-	var div = document.createElement("div");
+exports.mkDeck = function(deck, div){
+	if (!div) div = document.createElement("div");
 	for(var i=0; i<deck.length; i+=70){
 		var img = new Image();
 		img.src = "http://dek.im/deck/" + deck.slice(i, i+70).join(" ");

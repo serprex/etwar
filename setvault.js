@@ -13,7 +13,9 @@ module.exports = sutil.verifyAuth(function(opt, req, res, db){
 		});
 		while (opt.cards.length < 180) opt.cards.push("4t9");
 		if (cost <= vault.elec){
-			db.hset("E"+opt.e+":VAULT", "cards", opt.cards);
+			db.hset("E"+opt.e+":VAULT", "cards", opt.cards, function(err, result){
+				if (!err) res.end(JSON.stringify(opt.cards));
+			});
 		}else{
 			res.writeHead(403);
 			res.end();
