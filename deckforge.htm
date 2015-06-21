@@ -2,7 +2,7 @@
 <title>Deckforge</title>
 <link rel="stylesheet" href="ui.css">
 <style>
-table{width:1020px;table-layout:fixed;}
+table{width:1020px;table-layout:fixed;border-spacing:0;}
 td{width:170px}
 </style>
 <script src="browser.js"></script>
@@ -54,7 +54,7 @@ td{width:170px}
 			if (card.upped) return;
 			var tr = document.createElement("tr");
 			var input = document.createElement("input");
-			input.className = "numput ecol";
+			input.className = "numput";
 			input.addEventListener("input", updateCode);
 			cellMap.push({input:input, code:card.code});
 			tr.appendChild(input);
