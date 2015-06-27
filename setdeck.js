@@ -28,18 +28,23 @@ function countDeck(deck, ele, mark){
 	return legal && inelement > deck.length/2 ? ups : -1;
 }
 module.exports = sutil.verifyAuth(function(opt, req, res, db){
-	var main = opt.main, side = opt.side, role = opt.role, n = parseInt(opt.n) || 0, e = opt.e;
-	if (typeof main !== "string" || typeof side != "string" || typeof role != "string" || ((role == "Gen") != (n == 0))){
-		return sutil.reject(res);
-	}
-	main = main.split(" ");
-	side = side.split(" ");
-	if (main.length < 32 || main.length > 61 || side.length != 6) return sutil.reject(res);
-	var mark = util.fromTrueMark(main[main.length-1]);
-	if (mark == -1) return sutil.reject(res);
-	var mainCount = countMain(main, e, mark), sideCound = countSide(side, e, mark);
-	if (mainCount == -1 || sideCount == -1){
-		return sutil.reject(res);
-	}
-
+	db.get("ROUND", function(err, round){
+		var main = opt.main, side = opt.side, role = opt.role, n = parseInt(opt.n) || 0, e = opt.e;
+		if (typeof main !== "string" || typeof side != "string" || typeof role != "string" || ((role == "Gen") != (n == 0))){
+			return sutil.reject(res);
+		}
+		main = util.decodeDeck(main);
+		side = util.decodeDeck(side);
+		if (main.length < 32 || main.length > 61 || side.length != 6) return sutil.reject(res);
+		var mark = util.fromTrueMark(main[main.length-1]);
+		if (mark == -1) return sutil.reject(res);
+		var mainCount = countMain(main, e, mark), sideCound = countSide(side, e, mark);
+		if (mainCount == -1 || sideCount == -1){
+			return sutil.reject(res);
+		}
+		var prefix = "E"+opt.e+":"+
+		db.lset(prefix+"DECKS", n, util.encodeDeck(main));
+		db.lset(prefix+"SIDES", n, util.encodeDeck(side));
+		db.lset(prefix+"ROLES", n, role);
+	});
 });

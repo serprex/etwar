@@ -64,14 +64,14 @@ function createViewVault(){
 	vsubmit.type = "button";
 	vsubmit.value = "Submit";
 	vsubmit.addEventListener("click", function(){
-		ui.xhrSend("setvault?"+mkAuthQuery({cards:vin.value}), function(){
+		ui.xhrSend("setvault?"+mkAuthQuery({cards:util.encodeDeck(vin.value)}), function(){
 			var result = this.responseText;
 			vin.value = result;
 			ui.clearDiv(vimg);
-			ui.mkDeck(result.split(" "), vimg);
+			ui.mkDeck(result, vimg);
 		});
 	});
-	var vimg = ui.mkDeck(vault.cards.split(" "));
+	var vimg = ui.mkDeck(vault.cards);
 	maindiv.appendChild(vin);
 	maindiv.appendChild(vsubmit);
 	maindiv.appendChild(document.createElement("br"));
@@ -93,7 +93,7 @@ function createViewDecks(){
 		inputrole.value = role;
 		var submit = document.createElement("input");
 		submit.addEventListener("click", function(){
-			ui.xhrSend("setdeck?"+mkAuthQuery({n:i, deck:inputdeck.value, side:inputside.value, role:inputrole.value}));
+			ui.xhrSend("setdeck?"+mkAuthQuery({n:i, deck:util.encodeDeck(inputdeck.value), side:util.encodeDeck(inputside.value), role:inputrole.value}));
 		});
 		submit.value = "Submit";
 		maindiv.appendChild(document.createTextNode("Deck " + (i+1)));

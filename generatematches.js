@@ -3,7 +3,7 @@ module.exports = sutil.verifyWmAuth(function(opt, req, res, db){
 	var task = sutil.mkTask(function(result){
 		var matches = [], memberlists = [];
 		for(var i=0; i<12; i++){
-			var count = result[i].cards.split(" ").length;
+			var count = util.decklength(result[i].cards);
 			var members = count < 60 ? 0 :
 				count < 90 ? 2 :
 				count < 120 ? 3 :
