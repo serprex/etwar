@@ -30,7 +30,7 @@ function createLoginForm(){
 }
 function createPanel(){
 	ui.clearDiv(maindiv);
-	round = JSON.parse(this.responseText);
+	round = parseInt(this.responseText);
 	if (round == 0){
 		var tputs = [];
 		var tbl = document.createElement("table");

@@ -38,7 +38,7 @@ module.exports = sutil.verifyAuth(function(opt, req, res, db){
 		if (main.length < 32 || main.length > 61 || side.length != 6) return sutil.reject(res);
 		var mark = util.fromTrueMark(main[main.length-1]);
 		if (mark == -1) return sutil.reject(res);
-		var mainCount = countMain(main, e, mark), sideCound = countSide(side, e, mark);
+		var mainCount = countMain(main, e, mark, role), sideCound = countSide(side, e, mark, role);
 		if (mainCount == -1 || sideCount == -1){
 			return sutil.reject(res);
 		}

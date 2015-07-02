@@ -1,9 +1,7 @@
 var qs = require("querystring");
 var sutil = require("./sutil");
 module.exports = sutil.verifyWmAuth(function(opt, req, res, db){
-	var counter = 0, blankpool = [];
-	for(var i=0; i<180; i++) blankpool.push("4t9");
-	blankpool = blankpool.join(" ")
+	var counter = 0, blankpool = "5k4t9";
 	opt.s.forEach(function(sz, i){
 		var ele = i+1;
 		db.del("E"+ele+":VAULT", "E"+ele+":1:DECKS", "E"+ele+":1:SIDES", "E"+ele+":1:ROLES");
